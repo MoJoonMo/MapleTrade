@@ -54,7 +54,7 @@ for il in item_name:
 
             arr = []
             standard = []
-            edge_list = ['center']
+            edge_list = ['center','center_archer','center_chief','center_chief','center_knight','center_magician','center_pirate','center_xenon']
             for eg in edge_list:
                 template = cv.imread('image_data_original/edge/'+eg+'.png',0)
                 w, h = template.shape[::-1]
