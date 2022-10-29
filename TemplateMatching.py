@@ -59,7 +59,7 @@ for il in item_name:
                 template = cv.imread('image_data_original/edge/'+eg+'.png',0)
                 w, h = template.shape[::-1]
                 res = cv.matchTemplate(img_gray,template,cv.TM_CCOEFF_NORMED)
-                threshold = 0.70
+                threshold = 0.60
                 loc = np.where( res >= threshold) 
 
                 for pt in zip(*loc[::-1]):
@@ -87,6 +87,7 @@ for il in item_name:
             arr.sort()
 
             for a in arr:
+                print(standard)
                 if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1]:
                     if a[0] > y_loc + 6 :
                         if a[2] != "(" and a[2] != "+" and a[2] != ")":
