@@ -45,7 +45,7 @@ def onMouse(event, x,y,flags, param):
             cv.imwrite('./save.jpg',roi)
             print('capture')
             #글자추출
-            print(pytesseract.image_to_string(cv.imread('./save.jpg'), lang='kor'))
+            print(pytesseract.image_to_string(cv.imread('./save.jpg'), lang='eng+kor'))
  
  #스크린샷 찍고저장
 img=ImageGrab.grab()

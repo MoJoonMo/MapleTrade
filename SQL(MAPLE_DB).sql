@@ -1,26 +1,20 @@
 
 use maple_db;
 /*
+DROP TABLE sell_item;
 CREATE TABLE sell_item
 (
    id INT PRIMARY KEY AUTO_INCREMENT,
    item_name VARCHAR(32) NOT NULL,
    item_sell_date VARCHAR(32) NOT NULL,
    item_price VARCHAR(32) NOT NULL,
-   item_option_id INT NOT NULL
+   item_option_id INT NOT NULL,
+   crt_id VARCHAR(20),
+   crt_dt VARCHAR(14)
 ) ENGINE=INNODB;
+CREATE INDEX sell_item_idx1 ON sell_item(item_name);
 
-
-CREATE TABLE sell_item
-(
-   id INT PRIMARY KEY AUTO_INCREMENT,
-   item_name VARCHAR(32) NOT NULL,
-   item_sell_date VARCHAR(32) NOT NULL,
-   item_price VARCHAR(32) NOT NULL,
-   item_option_id INT NOT NULL
-) ENGINE=INNODB;
-CREATE INDEX sell_item_idx1 ON sell_item(item_name)
-
+DROP TABLE sell_item_option;
 CREATE TABLE sell_item_option
 (
    item_option_id INT,
@@ -28,9 +22,12 @@ CREATE TABLE sell_item_option
    first_amt VARCHAR(50),
    second_amt VARCHAR(50),
    third_amt VARCHAR(50),
-   forth_amt VARCHAR(50)
+   forth_amt VARCHAR(50),
+   crt_id VARCHAR(20),
+   crt_dt VARCHAR(14)
 ) ENGINE=INNODB;
 CREATE INDEX sell_item_option_idx1 ON sell_item_option(item_option_id,option_name);
+
 
 CREATE TABLE SEQUENCES(
 	NAME VARCHAR(32)
@@ -79,16 +76,45 @@ DELIMITER $$
     #시퀀스 테이블 만들기
     DROP TABLE sequences;
    CREATE TABLE sequences   ( seq_name VARCHAR(32) , currval BIGINT UNSIGNED) ENGINE = InnoDB;
+   
+   #검색 아이템
+
+DROP TABLE search_item_list;
+CREATE TABLE search_item_list(
+	item_name VARCHAR(150) 
+    ,item_type VARCHAR(150),
+     PRIMARY KEY(item_name,item_type)
+) ENGINE = InnoDB;
     */
 
 CALL create_sequence('sell_item_option');
 INSERT INTO `maple_db`.`sell_item` (`item_name`, `item_sell_date`, `item_price`, `item_option_id`) VALUES ('234', '234', '234', '234');
 
  
-select * from sell_item;
+select si.*,sio.* 
+from sell_item si
+join sell_item_option sio on si.item_option_id = sio.item_option_id
+;
 select *
-from sell_item_option;
+from sell_item_option
+where item_option_id between 703 and 711
+;
 select nextval('sell_item_option');
 select *
 from sequences;
 
+select *
+from search_item_list;
+
+insert into search_item_list values
+('마이스터링'),
+('가디언엔젤링'),
+('아케인셰이드나이트숄더'),
+('아케인셰이드나이트글러브'),
+('아케인셰이드나이트슈즈'),
+('아케인셰이드나이트케이프');
+insert into search_item_list values
+('아케인셰이드나이트숄더'),
+('아케인셰이드나이트글러브'),
+('아케인셰이드나이트슈즈'),
+('아케인셰이드나이트케이프');
