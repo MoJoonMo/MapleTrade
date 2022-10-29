@@ -39,6 +39,10 @@ for il in item_name:
         maple_screen = gf.screenshot(-2)
 
         for loops in range(0,9): #한페이지에 9개
+            price = gf.getItemData("price",loops)
+            sell_date = gf.getItemData("date",loops)
+            if int(price) <16000000:
+                continue
             idx = -1
             maple_screen = gf.screenshot(loops)
             img_rgb = cv.imread('screenshot.png')
@@ -96,8 +100,7 @@ for il in item_name:
                             jdx = jdx + 1
                         else:
                             answer[idx][jdx] = answer[idx][jdx] + a[2]
-            price = gf.getItemData("price",loops)
-            sell_date = gf.getItemData("date",loops)
+            
 
             #answer.append(["price",arr_num,"","",""])
             get_index_sql = "SELECT nextval('sell_item_option')"
