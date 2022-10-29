@@ -59,7 +59,7 @@ for il in item_name:
                 template = cv.imread('image_data_original/edge/'+eg+'.png',0)
                 w, h = template.shape[::-1]
                 res = cv.matchTemplate(img_gray,template,cv.TM_CCOEFF_NORMED)
-                threshold = 0.80
+                threshold = 0.70
                 loc = np.where( res >= threshold) 
 
                 for pt in zip(*loc[::-1]):
