@@ -29,6 +29,8 @@ item_name = cur.fetchall()
 
 for il in item_name:
     print(il[0])
+    if il[2] == "Y":
+        continue
     gf.mouse_move("find",il[0])
     for pages in range(50): #페이지
         ###############페이지 검색
