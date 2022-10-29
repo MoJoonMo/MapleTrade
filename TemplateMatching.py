@@ -30,7 +30,7 @@ item_name = cur.fetchall()
 for il in item_name:
     print(il[0])
     gf.mouse_move("find",il[0])
-    for pages in range(10): #페이지
+    for pages in range(50): #페이지
         ###############페이지 검색
         answer = [] 
 
@@ -117,7 +117,10 @@ for il in item_name:
             sql = "INSERT INTO sell_item (`item_name`, `item_sell_date`, `item_price`, `item_option_id`, `crt_id`, `crt_dt`) VALUES ('" + il[0] + "','" + sell_date + "','" + price + "'," + str(rslt[0]) + ",'DB',date_format(now(), '%Y%m%d%H%i%s'))"
             cur.execute(sql)
             answer=[]
+
         con.commit()
+        if sell_date <= '20221000':
+            break
         gf.mouse_move("next","")
 
         
