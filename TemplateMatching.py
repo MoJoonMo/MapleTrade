@@ -87,7 +87,7 @@ for il in item_name:
             arr.sort()
 
             for a in arr:
-                print(standard)
+                #print(standard)
 
                 if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1]:
                     if a[0] > y_loc + 6 :
