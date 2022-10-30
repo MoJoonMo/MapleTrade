@@ -42,7 +42,7 @@ for il in item_name:
         for loops in range(0,9): #한페이지에 9개
             price = gf.getItemData("price",loops)
             sell_date = gf.getItemData("date",loops)
-            if int(price) <16000000:
+            if int(price) < int(il[3]):
                 continue
             idx = -1
             maple_screen = gf.screenshot(loops)
