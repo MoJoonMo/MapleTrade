@@ -83,7 +83,7 @@ for il in item_name:
             #이미지에서 find_list math 가져오기
             arr = gf.getItemDetail(img_gray,img_rgb)
             answer = gf.print_answer(arr,standard,standard_mid,standard_end)
-            answer.append(['스타포스',star_cnt,"","","","original"])
+            answer.append(['스타포스',str(star_cnt),"","","","original"])
             get_index_sql = "SELECT nextval('sell_item_option')"
             cur.execute(get_index_sql)
             rslt = cur.fetchone()
