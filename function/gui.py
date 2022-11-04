@@ -120,7 +120,7 @@ def getItemData(kind, loops):
     return price
 
 
-def print_answer(arr,standard):
+def print_answer(arr,standard,standard_mid,standard_end):
     answer = []
     idx = -1
     jdx = 0
@@ -140,10 +140,13 @@ def print_answer(arr,standard):
             else:
                 if a[2] == "(" or a[2] == "+" or a[2] == ")":
                     jdx = jdx + 1
-                    if jdx == 3 and a[3] == "scroll":
+                    if jdx >= 3 and a[3] == "scroll":
                         jdx = 4
+                    
                 else:
                     #jdx = 1,4 : scroll / 2 : none / 3 : chuop
-                    
+                    if a[3] == "scroll_minus" and jdx < 4:
+                        jdx = 4
+                        answer[idx][jdx] = "-"    
                     answer[idx][jdx] = answer[idx][jdx] + a[2]
     return answer

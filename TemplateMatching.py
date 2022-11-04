@@ -53,8 +53,9 @@ for il in item_name:
 
             arr = []
             standard = []
-            edge_list = ['center','center_archer','center_chief','center_chief','center_knight','center_magician','center_pirate','center_xenon']
-
+            standard_mid = []
+            standard_end = []
+            edge_list = ['center','center_archer','center_chief','center_chief','center_knight','center_magician','center_pirate','center_xenon','potenability','upg','potenoption']
 
             starforce_list = ['star']
             #스타포스 인식
@@ -89,11 +90,13 @@ for il in item_name:
                 loc = np.where( res >= threshold) 
 
                 for pt in zip(*loc[::-1]):
-                    standard = [pt[1],pt[0],eg] # y,x,name
-                    cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,255,0), 2)
+                    if eg == "upg" or eg == "potenability":
+                        standard_mid = [pt[1],pt[0],eg]
+                    elif eg == "potenoption":
+                        standard_end = [pt[1],pt[0],eg]
+                    else:
+                        standard = [pt[1],pt[0],eg] # y,x,name
                     
-                cv.imwrite('res.png',img_rgb)
-                
             y_loc = 0
 
             for index, fl in enumerate(find_list):
@@ -113,12 +116,16 @@ for il in item_name:
                         for yloc in range(h):
                             (b, g, r) = img_rgb[pt[1]+yloc, pt[0]+xloc]
                             #print(pt[1]+yloc,pt[0]+xloc,b,g,r)
-                            if b >=254 and g>= 254 and r>= 101 and r<=103:
+                            if (b >= 254 and g >= 254 and r >= 101 and r <= 103):
                                 value_kind = "scroll"
                                 break_yn = "Y"
                                 break
-                            elif b <=2 and g>= 254 and r>= 203 and r<=205:
+                            elif b <= 2 and g >= 254 and r >= 203 and r <= 205:
                                 value_kind = "chuop"
+                                break_yn = "Y"
+                                break
+                            elif b >= 101 and b <= 103 and r >= 254 and g <= 2:
+                                value_kind = "scroll_minus"
                                 break_yn = "Y"
                                 break
                         if break_yn == "Y":
@@ -159,13 +166,16 @@ for il in item_name:
                     else:
                         if a[2] == "(" or a[2] == "+" or a[2] == ")":
                             jdx = jdx + 1
-                            if jdx == 3 and a[3] == "scroll":
+                            if jdx >= 3 and a[3] == "scroll":
                                 jdx = 4
+                            
                         else:
                             #jdx = 1,4 : scroll / 2 : none / 3 : chuop
-                            
+                            if a[3] == "scroll_minus" and jdx < 4:
+                                jdx = 4
+                                answer[idx][jdx] = "-"    
                             answer[idx][jdx] = answer[idx][jdx] + a[2]
-                    
+                            
 
 
             #answer.append(["price",arr_num,"","",""])
