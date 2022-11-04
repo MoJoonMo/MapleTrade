@@ -8,7 +8,7 @@ from function import gui as gf
 
 
 #(b, g, r) = cv2_image[0, 0]        
-img_rgb = cv.imread('maple_5.png')
+img_rgb = cv.imread('maple_4.png')
 img_gray = cv.cvtColor(img_rgb, cv.COLOR_BGR2GRAY)
 
 find_list_name = ['STR','DEX','INT','LUK','공격력','마력','몬스터 방어율 무시','방어력','보스 몬스터 공격 시 데미지','업그레이드 가능 횟수','올스탯','점프력','최대 HP','최대 MP','1','2','3','4','5','6','7','8','9','0','(',')','+','%','%','데미지','가위 사용 가능 횟수','모든 스킬 재사용 대기시간','캐릭터 기준 10레벨 당','크리티컬 데미지']

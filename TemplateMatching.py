@@ -160,7 +160,7 @@ for il in item_name:
                             y_loc = a[0]
                             idx = idx + 1
                             jdx = 0
-                            if a[2] == "업그레이드 가능 횟수":
+                            if a[2] == "업그레이드 가능 횟수" or a[2] == "가위 사용 가능 횟수":
                                 jdx = 1
                             answer.append([a[2],"","","",""])
                     else:

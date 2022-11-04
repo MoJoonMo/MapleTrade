@@ -128,15 +128,20 @@ def print_answer(arr,standard,standard_mid,standard_end):
     for a in arr:
         #print(standard)
 
-        if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1]:
+        if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1] :
             if a[0] > y_loc + 6 :
                 if a[2] != "(" and a[2] != "+" and a[2] != ")":
                     y_loc = a[0]
                     idx = idx + 1
                     jdx = 0
-                    if a[2] == "업그레이드 가능 횟수":
+                    if a[2] == "업그레이드 가능 횟수" or a[2] == "가위 사용 가능 횟수":
                         jdx = 1
-                    answer.append([a[2],"","","",""])
+                    if a[0] < standard_mid[0]:
+                        answer.append([a[2],"","","",""])
+                    elif a[0] < standard_end[0]:
+                        answer.append(["poten_" + a[2],"","","",""])
+                    elif a[0] >= standard_end[0]:
+                        answer.append(["addipoten_" + a[2],"","","",""])
             else:
                 if a[2] == "(" or a[2] == "+" or a[2] == ")":
                     jdx = jdx + 1
@@ -149,4 +154,5 @@ def print_answer(arr,standard,standard_mid,standard_end):
                         jdx = 4
                         answer[idx][jdx] = "-"    
                     answer[idx][jdx] = answer[idx][jdx] + a[2]
+
     return answer
