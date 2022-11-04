@@ -53,8 +53,8 @@ for il in item_name:
 
             arr = []
             standard = []
-            standard_mid = ['0','0','0','0']
-            standard_end = ['0','0','0','0']
+            standard_mid = [0,0,'0']
+            standard_end = [0,0,'0']
             edge_list = ['center','center_archer','center_chief','center_chief','center_knight','center_magician','center_pirate','center_xenon','potenability','upg','potenoption']
 
             starforce_list = ['star']
