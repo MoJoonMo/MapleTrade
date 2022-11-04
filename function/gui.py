@@ -69,7 +69,8 @@ def mouse_move(kind, item_name):
         t.sleep(0.1)
         dd_dll.DD_btn(mouseleftup)
         t.sleep(0.1)
-
+  #  if kind == "equip":
+        
 def screenshot(idx):
     dd_dll.DD_mov(0,0)
     t.sleep(0.1)
@@ -117,3 +118,32 @@ def getItemData(kind, loops):
     for index in brr:
         price = price + index[2]
     return price
+
+
+def print_answer(arr,standard):
+    answer = []
+    idx = -1
+    jdx = 0
+    y_loc = 0
+    for a in arr:
+        #print(standard)
+
+        if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1]:
+            if a[0] > y_loc + 6 :
+                if a[2] != "(" and a[2] != "+" and a[2] != ")":
+                    y_loc = a[0]
+                    idx = idx + 1
+                    jdx = 0
+                    if a[2] == "업그레이드 가능 횟수":
+                        jdx = 1
+                    answer.append([a[2],"","","",""])
+            else:
+                if a[2] == "(" or a[2] == "+" or a[2] == ")":
+                    jdx = jdx + 1
+                    if jdx == 3 and a[3] == "scroll":
+                        jdx = 4
+                else:
+                    #jdx = 1,4 : scroll / 2 : none / 3 : chuop
+                    
+                    answer[idx][jdx] = answer[idx][jdx] + a[2]
+    return answer

@@ -1,6 +1,5 @@
 import cv2 as cv
 import numpy as np
-
 import pymysql as mysql
 
 from function import gui as gf
@@ -55,6 +54,33 @@ for il in item_name:
             arr = []
             standard = []
             edge_list = ['center','center_archer','center_chief','center_chief','center_knight','center_magician','center_pirate','center_xenon']
+
+
+            starforce_list = ['star']
+            #스타포스 인식
+            star_cnt =0
+            for sf in starforce_list:
+                template = cv.imread('image_data_original/'+sf+'.png',0)
+                w, h = template.shape[::-1]
+                res = cv.matchTemplate(img_gray,template,cv.TM_CCOEFF_NORMED)
+                threshold = 0.90
+                loc = np.where( res >= threshold)
+                
+                for pt in zip(*loc[::-1]):
+                    break_yn = 'N'
+                    value_kind = "none"
+                    
+                    for xloc in range(w):
+                        for yloc in range(h):
+                            (b, g, r) = img_rgb[pt[1]+xloc, pt[0]+yloc]
+                            #print(pt[1]+xloc,pt[0]+yloc,b,g,r)
+                            if b <=2 and g>= 220 and g<=222 and r>= 254:
+                                star_cnt = star_cnt + 1
+                                break_yn = "Y"
+                                break
+                        if break_yn == "Y":
+                            break
+
             for eg in edge_list:
                 template = cv.imread('image_data_original/edge/'+eg+'.png',0)
                 w, h = template.shape[::-1]
@@ -69,6 +95,38 @@ for il in item_name:
                 cv.imwrite('res.png',img_rgb)
                 
             y_loc = 0
+
+            for index, fl in enumerate(find_list):
+                template = cv.imread('image_data_original/'+fl+'.png',0)
+                w, h = template.shape[::-1]
+                res = cv.matchTemplate(img_gray,template,cv.TM_CCOEFF_NORMED)
+                threshold = 0.95
+                loc = np.where( res >= threshold) 
+                
+                for pt in zip(*loc[::-1]):
+                    #cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
+                    #print(pt[0],pt[1])
+                    break_yn = 'N'
+                    value_kind = "none"
+                    
+                    for xloc in range(w):
+                        for yloc in range(h):
+                            (b, g, r) = img_rgb[pt[1]+yloc, pt[0]+xloc]
+                            #print(pt[1]+yloc,pt[0]+xloc,b,g,r)
+                            if b >=254 and g>= 254 and r>= 101 and r<=103:
+                                value_kind = "scroll"
+                                break_yn = "Y"
+                                break
+                            elif b <=2 and g>= 254 and r>= 203 and r<=205:
+                                value_kind = "chuop"
+                                break_yn = "Y"
+                                break
+                        if break_yn == "Y":
+                            break
+                    arr.append([pt[1],pt[0],find_list_name[index],value_kind]) # y,x,name
+                    #print(find_list_name[index],b,g,r,pt[0],pt[1],w,h,value_kind)
+
+            """
             for index, fl in enumerate(find_list):
                 template = cv.imread('image_data_original/'+fl+'.png',0)
                 w, h = template.shape[::-1]
@@ -81,7 +139,7 @@ for il in item_name:
                     cv.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
 
                 cv.imwrite('res.png',img_rgb)
-
+            """
             #데이터 넣는 부분
 
             arr.sort()
@@ -101,9 +159,14 @@ for il in item_name:
                     else:
                         if a[2] == "(" or a[2] == "+" or a[2] == ")":
                             jdx = jdx + 1
+                            if jdx == 3 and a[3] == "scroll":
+                                jdx = 4
                         else:
+                            #jdx = 1,4 : scroll / 2 : none / 3 : chuop
+                            
                             answer[idx][jdx] = answer[idx][jdx] + a[2]
-            
+                    
+
 
             #answer.append(["price",arr_num,"","",""])
             get_index_sql = "SELECT nextval('sell_item_option')"
