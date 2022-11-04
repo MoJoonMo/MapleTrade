@@ -162,7 +162,13 @@ for il in item_name:
                             jdx = 0
                             if a[2] == "업그레이드 가능 횟수" or a[2] == "가위 사용 가능 횟수":
                                 jdx = 1
-                            answer.append([a[2],"","","",""])
+                            if a[0] < standard_mid[0]:
+                                answer.append([a[2],"","","",""])
+                            elif a[0] < standard_end[0]:
+                                answer.append(["poten_" + a[2],"","","",""])
+                            elif a[0] >= standard_end[0]:
+                                answer.append(["addipoten_" + a[2],"","","",""])
+
                     else:
                         if a[2] == "(" or a[2] == "+" or a[2] == ")":
                             jdx = jdx + 1
