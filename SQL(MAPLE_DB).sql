@@ -27,7 +27,7 @@ CREATE TABLE sell_item_option
    crt_dt VARCHAR(14)
 ) ENGINE=INNODB;
 CREATE INDEX sell_item_option_idx1 ON sell_item_option(item_option_id,option_name);
-
+ALTER TABLE `sell_item_option_idx1` ADD `option_kind` VARCHAR(30) ;
 
 CREATE TABLE SEQUENCES(
 	NAME VARCHAR(32)
@@ -135,7 +135,9 @@ CREATE TABLE search_item_detail(
 select si.item_name,si.item_sell_date,si.item_price,sio.*
 from sell_item si
 join sell_item_option sio on si.item_option_id = sio.item_option_id
-and sio.crt_dt >='20221103'
+and sio.crt_dt >='2022110409';
+
+and si.item_price =31111111
  ;
 select distinct(option_name)
 from sell_item_option;
@@ -153,12 +155,13 @@ from search_item_detail
 select *
 from sell_item si
 ;
-DELETE FROM search_item_list;
+
+
 
 
   
 select *
-from search_item_list l
+from search_item_list l;
 where ifnull(use_yn,'Y') ='Y';
 insert into search_item_list values
 ('데아시두스이어링','귀고리','Y','10000000'),
@@ -170,7 +173,7 @@ insert into search_item_list values
 ('아쿠아틱레터눈장식','눈장식','Y','10000000');
 
 
-select item_price,
+select item_name,item_price,
 case when greatest(strz+dexz*0.1+allp*10+att*4, dexz+strz*0.1+allp*10+att*4,intz+lukz*0.1+allp*10+mtt*4,lukz+dexz*0.1+allp*10+att*4) = strz+dexz*0.1+allp*10+att*4 then
 	'str'
     when greatest(strz+dexz*0.1+allp*10+att*4, dexz+strz*0.1+allp*10+att*4,intz+lukz*0.1+allp*10+mtt*4,lukz+dexz*0.1+allp*10+att*4) = dexz+strz*0.1+allp*10+att*4 then

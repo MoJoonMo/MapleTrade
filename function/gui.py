@@ -119,6 +119,40 @@ def getItemData(kind, loops):
         price = price + index[2]
     return price
 
+def getItemDetail(img_gray,img_rgb):
+    arr=[]
+    find_list_name = ['STR','DEX','INT','LUK','공격력','마력','몬스터 방어율 무시','방어력','보스 몬스터 공격 시 데미지','업그레이드 가능 횟수','올스탯','점프력','최대 HP','최대 MP','1','2','3','4','5','6','7','8','9','0','(',')','+','%','%','데미지','가위 사용 가능 횟수','모든 스킬 재사용 대기시간','캐릭터 기준 10레벨 당','크리티컬 데미지']
+    find_list = ['STR','DEX','INT','LUK','att','mtt','igd','def','btt','upg','all','jmp','mhp','mmp','1','2','3','4','5','6','7','8','9','0','open_bracket','close_bracket','plus','percent','percent2','dmg','scissors','cool','perlevel','cridmg']
+    
+    for index, fl in enumerate(find_list):
+        w, h, loc = matchTemplate(img_gray,fl, 0.95) #threshold 
+        for pt in zip(*loc[::-1]):
+            break_yn = 'N'
+            value_kind = "none"
+            
+            for xloc in range(w):
+                for yloc in range(h):
+                    (b, g, r) = img_rgb[pt[1]+yloc, pt[0]+xloc]
+                    #print(pt[1]+yloc,pt[0]+xloc,b,g,r)
+                    if (b >= 254 and g >= 254 and r >= 101 and r <= 103):
+                        value_kind = "scroll"
+                        break_yn = "Y"
+                        break
+                    elif b <= 2 and g >= 254 and r >= 203 and r <= 205:
+                        value_kind = "chuop"
+                        break_yn = "Y"
+                        break
+                    elif b >= 101 and b <= 103 and r >= 254 and g <= 2:
+                        value_kind = "scroll_minus"
+                        break_yn = "Y"
+                        break
+                if break_yn == "Y":
+                    break
+            arr.append([pt[1],pt[0],find_list_name[index],value_kind]) # y,x,name
+    #데이터 넣는 부분
+
+    arr.sort()
+    return arr
 
 def print_answer(arr,standard,standard_mid,standard_end):
     answer = []
@@ -128,7 +162,7 @@ def print_answer(arr,standard,standard_mid,standard_end):
     for a in arr:
         #print(standard)
 
-        if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1] :
+        if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1]:
             if a[0] > y_loc + 6 :
                 if a[2] != "(" and a[2] != "+" and a[2] != ")":
                     y_loc = a[0]
@@ -142,6 +176,7 @@ def print_answer(arr,standard,standard_mid,standard_end):
                         answer.append(["poten_" + a[2],"","","",""])
                     elif a[0] >= standard_end[0]:
                         answer.append(["addipoten_" + a[2],"","","",""])
+
             else:
                 if a[2] == "(" or a[2] == "+" or a[2] == ")":
                     jdx = jdx + 1
@@ -156,3 +191,10 @@ def print_answer(arr,standard,standard_mid,standard_end):
                     answer[idx][jdx] = answer[idx][jdx] + a[2]
 
     return answer
+
+def matchTemplate(img_gray,eg,threshold):
+    template = cv.imread('image_data_original/'+eg+'.png',0)
+    w, h = template.shape[::-1]
+    res = cv.matchTemplate(img_gray,template,cv.TM_CCOEFF_NORMED)
+    loc = np.where( res >= threshold) 
+    return w, h, loc
