@@ -135,7 +135,7 @@ CREATE TABLE search_item_detail(
 select si.item_name,si.item_sell_date,si.item_price,sio.*
 from sell_item si
 join sell_item_option sio on si.item_option_id = sio.item_option_id
-and sio.crt_dt >='2022110409';
+and sio.crt_dt >='2022110410';
 
 and si.item_price =31111111
  ;
@@ -158,7 +158,6 @@ from sell_item si
 
 
 
-
   
 select *
 from search_item_list l;
@@ -172,7 +171,7 @@ insert into search_item_list values
 ('응축된힘의결정석','얼굴장식','Y','10000000'),
 ('아쿠아틱레터눈장식','눈장식','Y','10000000');
 
-
+delete from search_item_detail2;
 select item_name,item_price,
 case when greatest(strz+dexz*0.1+allp*10+att*4, dexz+strz*0.1+allp*10+att*4,intz+lukz*0.1+allp*10+mtt*4,lukz+dexz*0.1+allp*10+att*4) = strz+dexz*0.1+allp*10+att*4 then
 	'str'

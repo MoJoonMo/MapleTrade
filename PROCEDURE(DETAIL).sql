@@ -160,7 +160,7 @@ BEGIN
 					SET dexp = dexp + SUBSTRING(v_first_amt,1,CHAR_LENGTH(v_first_amt)-1);
 				ELSE 
 					SET dexz = dexz + v_first_amt;
-				END IF;
+				END IF; 
 			ELSEIF v_option_name = "INT" THEN
 				IF substr(v_first_amt,-1) = "%" THEN
 					SET intp = intp + SUBSTRING(v_first_amt,1,CHAR_LENGTH(v_first_amt)-1);

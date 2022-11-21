@@ -2,7 +2,11 @@ import cv2 as cv
 import numpy as np
 import pymysql as mysql
 
+from config import db as db
+from sql import select_sql as select_sql
+from sql import insert_sql as insert_sql
 from function import gui as gf
+from function import findImage as fi
 
         #### 경매장
         #시세탭에서 아이템 검색
@@ -15,10 +19,10 @@ from function import gui as gf
         #im에서 장비창 영역 찾고, 
         #Main 장비탭으로 이동한 다음 
         #각 부위별로 마우스 커서 가져다둬서 아이템 정보 screentshot 찍는다.
-con = mysql.connect(host='database-1.caeooxqk7wut.us-west-2.rds.amazonaws.com', user='midadm', password ='!dlatl00', db='maple_db',charset='utf8')
+con = mysql.connect(host=db.host, user=db.user, password =db.password, db=db.db, charset=db.charset)
 cur = con.cursor()
 
-sql = "select * from search_item_list where ifnull(use_yn,'Y') = 'Y' "
+sql = select_sql.search_item_list("Y")
 cur.execute(sql)
 item_name = cur.fetchall()
 
@@ -29,7 +33,7 @@ for il in item_name:
     for pages in range(50): #페이지
         ###############페이지 검색
         answer = [] 
-
+    
         jdx = 0
         maple_screen = gf.screenshot(-1)
         maple_screen = gf.screenshot(-2)
@@ -48,43 +52,23 @@ for il in item_name:
             standard = []
             standard_mid = [0,0,'0']
             standard_end = [0,0,'0']
-            edge_list = ['center','center_archer','center_chief','center_chief','center_knight','center_magician','center_pirate','center_xenon','potenability','upg','potenoption']
-            starforce_list = ['star']
-            #스타포스 인식
-            star_cnt = 0
-            for sf in starforce_list:
-                w, h, loc = gf.matchTemplate(img_gray,sf, 0.9) 
-                for pt in zip(*loc[::-1]):
-                    break_yn = 'N'
-                    value_kind = "none"
-                    for xloc in range(w):
-                        for yloc in range(h):
-                            (b, g, r) = img_rgb[pt[1]+xloc, pt[0]+yloc]
-                            #print(pt[1]+xloc,pt[0]+yloc,b,g,r)
-                            if b <=2 and g>= 220 and g<=222 and r>= 254:
-                                star_cnt = star_cnt + 1
-                                break_yn = "Y"
-                                break
-                        if break_yn == "Y":
-                            break
-            
-            for eg in edge_list: 
-                w, h, loc = gf.matchTemplate(img_gray,'edge/' + eg, 0.6) 
-                for pt in zip(*loc[::-1]):
-                    if eg == "upg" or eg == "potenability":
-                        standard_mid = [pt[1],pt[0],eg]
-                    elif eg == "potenoption":
-                        standard_end = [pt[1],pt[0],eg]
-                    else:
-                        standard = [pt[1],pt[0],eg] # y,x,name
-                    
-            y_loc = 0
+            #추옵, 작, 스타포스, 윗잠, 아랫잠
+
+            star_cnt = fi.findImage(img_gray, img_rgb, "starforce") #스타포스 인식
+            standard, standard_mid, standard_end = fi.findImage(img_gray, img_rgb, "standard") #옵션 위치 확인
 
             #이미지에서 find_list math 가져오기
-            arr = gf.getItemDetail(img_gray,img_rgb)
-            answer = gf.print_answer(arr,standard,standard_mid,standard_end)
+            arr = gf.getItemDetail(img_gray,img_rgb) #추옵, 작, 윗잠, 아랫잠
+            answer, poten, addipoten = gf.print_answer(arr,standard,standard_mid,standard_end)
             answer.append(['스타포스',str(star_cnt),"","","","original"])
-            get_index_sql = "SELECT nextval('sell_item_option')"
+
+            print(str(star_cnt))
+            print(answer)
+            print(poten)
+            print(addipoten)
+            get_index_sql = select_sql.search_nextval("sell_item_option") 
+
+            
             cur.execute(get_index_sql)
             rslt = cur.fetchone()
             
