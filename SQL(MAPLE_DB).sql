@@ -1,6 +1,6 @@
 
-use maple_db;
 /*
+
 DROP TABLE sell_item;
 CREATE TABLE sell_item
 (
@@ -27,8 +27,10 @@ CREATE TABLE sell_item_option
    crt_dt VARCHAR(14)
 ) ENGINE=INNODB;
 CREATE INDEX sell_item_option_idx1 ON sell_item_option(item_option_id,option_name);
-ALTER TABLE `sell_item_option_idx1` ADD `option_kind` VARCHAR(30) ;
+ALTER TABLE `sell_item_option` ADD `option_kind` VARCHAR(30) ;
 
+
+DROP TABLE IF EXISTS SEQUENCES;
 CREATE TABLE SEQUENCES(
 	NAME VARCHAR(32)
     ,CURRVAL BIGINT UNSIGNED
@@ -44,8 +46,8 @@ DELIMITER $$
     DETERMINISTIC
     BEGIN
 		DECLARE ret BIGINT UNSIGNED;
-        UPDATE sequences SET currval = currval + 1 WHERE seq_name = the_name;
-        SELECT currval INTO ret FROM sequences WHERE seq_name = the_name LIMIT 1;
+        UPDATE SEQUENCES SET currval = currval + 1 WHERE seq_name = the_name;
+        SELECT currval INTO ret FROM SEQUENCES WHERE seq_name = the_name LIMIT 1;
         RETURN ret;
 	END;
 
@@ -55,8 +57,8 @@ DELIMITER $$
     MODIFIES SQL DATA
     DETERMINISTIC
     BEGIN 
-    DELETE FROM sequences WHERE seq_name = the_name;
-    INSERT INTO sequences VALUES(the_name,0);
+    DELETE FROM SEQUENCES WHERE seq_name = the_name;
+    INSERT INTO SEQUENCES VALUES(the_name,0);
 	END;
     
 
@@ -69,13 +71,13 @@ DELIMITER $$
     DETERMINISTIC
     BEGIN
 		DECLARE ret BIGINT UNSIGNED;
-        SELECT currval INTO ret FROM sequences WHERE seq_name = the_name LIMIT 1;
+        SELECT currval INTO ret FROM SEQUENCES WHERE seq_name = the_name LIMIT 1;
         RETURN ret;
 	END;    
     
     #시퀀스 테이블 만들기
-    DROP TABLE sequences;
-   CREATE TABLE sequences   ( seq_name VARCHAR(32) , currval BIGINT UNSIGNED) ENGINE = InnoDB;
+    DROP TABLE SEQUENCES;
+   CREATE TABLE SEQUENCES   ( seq_name VARCHAR(32) , currval BIGINT UNSIGNED) ENGINE = InnoDB;
    
    #검색 아이템
 
@@ -124,6 +126,10 @@ CREATE TABLE search_item_detail(
 	cridmg INT,
      PRIMARY KEY(id,item_name)
 ) ENGINE = InnoDB;
+
+
+
+
 
     */
 
@@ -184,3 +190,11 @@ case when greatest(strz+dexz*0.1+allp*10+att*4, dexz+strz*0.1+allp*10+att*4,intz
 end
 ,greatest(strz+dexz*0.1+allp*10+att*4, dexz+strz*0.1+allp*10+att*4,intz+lukz*0.1+allp*10+mtt*4,lukz+dexz*0.1+allp*10+att*4)
 from  search_item_detail2 sid;
+
+
+INSERT INTO SEQUENCES(seq_name,currval) VALUES
+('sell_item_option',1),
+('sell_item',1);
+
+SELECT *
+FROM  SEQUENCES;

@@ -112,7 +112,6 @@ def screenshot(idx):
             #w, h, loc = matchTemplate(img_gray,'equip/equip_show_decoration',0.95)
 
             #여기를 기준으로 장비창 하나씩 스크린샷을 찍는다.            
-
         else:
             dd_dll.DD_mov(x+320, y+200+56*idx)
             t.sleep(0.2)
@@ -161,20 +160,29 @@ def getItemDetail(img_gray,img_rgb):
                 for yloc in range(h):
                     (b, g, r) = img_rgb[pt[1]+yloc, pt[0]+xloc]
                     #print(pt[1]+yloc,pt[0]+xloc,b,g,r)
-                    if (b >= 254 and g >= 254 and r >= 101 and r <= 103):
-                        value_kind = "scroll"
+                    if (b >= 254 and g >= 254 and r >= 101 and r <= 103): # 파란색
+                        value_kind = "total"
                         break_yn = "Y"
                         break
-                    elif b <= 2 and g >= 254 and r >= 203 and r <= 205:
+                    elif b <= 2 and g >= 254 and r >= 203 and r <= 205: # 초록색
                         value_kind = "chuop"
                         break_yn = "Y"
                         break
-                    elif b >= 101 and b <= 103 and r >= 254 and g <= 2:
+                    elif b >= 101 and b <= 103 and r >= 254 and g <= 2: # 빨간색
                         value_kind = "scroll_minus"
+                        break_yn = "Y"
+                        break
+                    elif (b <= 2 and g >= 203 and g <= 205 and r >= 254 ): # 주황색
+                        value_kind = "starforce"
+                        break_yn = "Y"
+                        break
+                    elif (b >= 254 and g >= 169 and g <= 171 and r >= 169 and r <= 171 ): # 연보라색
+                        value_kind = "scroll"
                         break_yn = "Y"
                         break
                 if break_yn == "Y":
                     break
+            
             arr.append([pt[1],pt[0],find_list_name[index],value_kind]) # y,x,name
     #데이터 넣는 부분
 
@@ -182,7 +190,6 @@ def getItemDetail(img_gray,img_rgb):
     return arr
 
 def print_answer(arr,standard,standard_mid,standard_end):
-
     answer = []
     poten = []
     addipoten = []
@@ -192,6 +199,7 @@ def print_answer(arr,standard,standard_mid,standard_end):
     idx_addipoten = -1
     y_loc = 0
     kind = 0
+    
     for a in arr:
         #print(standard)
         if a[0] > standard[0] and a[1] < standard[1] + 240 and standard[1] - 40< a[1]:
@@ -203,15 +211,15 @@ def print_answer(arr,standard,standard_mid,standard_end):
                     if a[2] == "업그레이드 가능 횟수" or a[2] == "가위 사용 가능 횟수":
                         jdx = 1
                     if a[0] < standard_mid[0]:
-                        answer.append([a[2],"","","","","original"])
+                        answer.append([a[2],"","","","","","original"])
                         idx = idx + 1
                         kind = 0
                     elif a[0] < standard_end[0]:
-                        poten.append([a[2],"","","","","poten"])
+                        poten.append([a[2],"","","","","","poten"])
                         idx_poten = idx_poten + 1
                         kind = 1
                     elif a[0] >= standard_end[0]:
-                        addipoten.append([a[2],"","","","","addipoten"])
+                        addipoten.append([a[2],"","","","","","addipoten"])
                         idx_addipoten = idx_addipoten + 1
                         kind = 2
 
@@ -222,10 +230,13 @@ def print_answer(arr,standard,standard_mid,standard_end):
                         jdx = 4
                     
                 else:
-                    #jdx = 1,4 : scroll / 2 : none / 3 : chuop
-                    if a[3] == "scroll_minus" and jdx < 4:
+                    #jdx = 1 : total / 2 : none / 3 : chuop / 4 : scroll / 5 : starforce
+                    
+                    if a[3] == "scroll_minus" and jdx < 5:
                         jdx = 4
                         answer[idx][jdx] = "-"    
+                    if a[3] == "starforce" and jdx < 6:
+                        jdx = 5
                     if kind == 0:
                         answer[idx][jdx] = answer[idx][jdx] + a[2]
                     elif kind == 1:

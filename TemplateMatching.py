@@ -60,12 +60,13 @@ for il in item_name:
             #이미지에서 find_list math 가져오기
             arr = gf.getItemDetail(img_gray,img_rgb) #추옵, 작, 윗잠, 아랫잠
             answer, poten, addipoten = gf.print_answer(arr,standard,standard_mid,standard_end)
-            answer.append(['스타포스',str(star_cnt),"","","","original"])
+            answer.append(['스타포스',str(star_cnt),"","","","","original"])
 
             print(str(star_cnt))
             print(answer)
             print(poten)
             print(addipoten)
+            
             get_index_sql = select_sql.search_nextval("sell_item_option") 
 
             
@@ -74,12 +75,23 @@ for il in item_name:
             
             for insert_data in answer:
                 #print(insert_data)
-                #print("INSERT INTO sell_item_option(`item_option_id`, `option_name`, `first_amt`, `second_amt`,`third_amt`,`forth_amt`,`crt_id`,`crt_dt`,`option_kind`) VALUES ('"+str(rslt[0])+"',ifnull('"+insert_data[0] +"','0'),ifnull('"+insert_data[1] +"','0'),ifnull('"+insert_data[2] +"','0'),ifnull('"+insert_data[3] +"','0'),ifnull('"+insert_data[4] +"','0'),'DB',date_format(now(), '%Y%m%d%H%i%s'),ifnull('"+insert_data[4]+"','0') )")
-                sql = "INSERT INTO sell_item_option(`item_option_id`, `option_name`, `first_amt`, `second_amt`,`third_amt`,`forth_amt`,`crt_id`,`crt_dt`,`option_kind`) VALUES ('"+str(rslt[0])+"',ifnull('"+insert_data[0] +"','0'),ifnull('"+insert_data[1] +"','0'),ifnull('"+insert_data[2] +"','0'),ifnull('"+insert_data[3] +"','0'),ifnull('"+insert_data[4] +"','0'),'DB',date_format(now(), '%Y%m%d%H%i%s'),ifnull('"+insert_data[4]+"','0') )"    
+                #print("INSERT INTO sell_item_option(`item_option_id`, `option_name`, `first_amt`, `second_amt`,`third_amt`,`forth_amt`,`crt_id`,`crt_dt`,`option_kind`) VALUES ('"+str(rslt[0])+"',ifnull('"+insert_data[0] +"','0'),ifnull('"+insert_data[1] +"','0'),ifnull('"+insert_data[2] +"','0'),ifnull('"+insert_data[3] +"','0'),ifnull('"+insert_data[4] +"','0'),'DB',date_format(now(), '%Y%m%d%H%i%s'),ifnull('"+insert_data[5]+"','0') )")
+                print(insert_data)
+                sql = "INSERT INTO sell_item_option(`item_option_id`, `option_name`, `first_amt`, `second_amt`,`third_amt`,`forth_amt`,`fifth_amt`,`crt_id`,`crt_dt`,`option_kind`) VALUES ('"+str(rslt[0])+"',ifnull('"+insert_data[0] +"','0'),ifnull('"+insert_data[1] +"','0'),ifnull('"+insert_data[2] +"','0'),ifnull('"+insert_data[3] +"','0'),ifnull('"+insert_data[4] +"','0'),ifnull('"+insert_data[5] +"','0'),'DB',date_format(now(), '%Y%m%d%H%i%s'),ifnull('"+insert_data[6]+"','0') )"    
                 #insert_data[0] +","+insert_data[1] +","+insert_data[2]+","+insert_data[3]+","+insert_data[4],")"
                 cur.execute(sql)
                 #rows = cur.fetchall()
                 #print(rows)
+            for insert_data in poten:
+                print(insert_data)
+                sql = "INSERT INTO sell_item_option(`item_option_id`, `option_name`, `first_amt`, `second_amt`,`third_amt`,`forth_amt`,`fifth_amt`,`crt_id`,`crt_dt`,`option_kind`) VALUES ('"+str(rslt[0])+"',ifnull('"+insert_data[0] +"','0'),ifnull('"+insert_data[1] +"','0'),ifnull('"+insert_data[2] +"','0'),ifnull('"+insert_data[3] +"','0'),ifnull('"+insert_data[4] +"','0'),ifnull('"+insert_data[5] +"','0'),'DB',date_format(now(), '%Y%m%d%H%i%s'),ifnull('"+insert_data[6]+"','0') )"    
+                cur.execute(sql)
+
+            for insert_data in addipoten:
+                print(insert_data)
+                sql = "INSERT INTO sell_item_option(`item_option_id`, `option_name`, `first_amt`, `second_amt`,`third_amt`,`forth_amt`,`fifth_amt`,`crt_id`,`crt_dt`,`option_kind`) VALUES ('"+str(rslt[0])+"',ifnull('"+insert_data[0] +"','0'),ifnull('"+insert_data[1] +"','0'),ifnull('"+insert_data[2] +"','0'),ifnull('"+insert_data[3] +"','0'),ifnull('"+insert_data[4] +"','0'),ifnull('"+insert_data[5] +"','0'),'DB',date_format(now(), '%Y%m%d%H%i%s'),ifnull('"+insert_data[6]+"','0') )"    
+                cur.execute(sql)
+
             print("INSERT INTO sell_item (`item_name`, `item_sell_date`, `item_price`, `item_option_id`, `crt_id`, `crt_dt`) VALUES ('" + il[0] + "','" + sell_date + "','" + price + "'," + str(rslt[0]) + ",'DB',date_format(now(), '%Y%m%d%H%i%s'))")
             sql = "INSERT INTO sell_item (`item_name`, `item_sell_date`, `item_price`, `item_option_id`, `crt_id`, `crt_dt`) VALUES ('" + il[0] + "','" + sell_date + "','" + price + "'," + str(rslt[0]) + ",'DB',date_format(now(), '%Y%m%d%H%i%s'))"
             cur.execute(sql)
